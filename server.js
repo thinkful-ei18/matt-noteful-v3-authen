@@ -2,6 +2,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const router = express.Router();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -20,6 +21,10 @@ const jwtStrategy = require('./passport/jwt');
 // Create an Express application
 const app = express();
 
+// Configure passport to use strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
   skip: () => process.env.NODE_ENV === 'test'
@@ -32,11 +37,21 @@ app.use(express.static('public'));
 app.use(express.json());
 
 // Mount router on "/api"
+app.use('/v3', usersRouter);
+app.use('/v3', authRouter);
+
+// usersRouter and authRouter need to be accessible to users without a JWT
+app.use(passport.authenticate('jwt', { session: false, failWithError: true }));
+
+// notesRouter, foldersRouter and tagsRouter routers should be protected so they are mounted after utilizing jwt
 app.use('/v3', notesRouter);
 app.use('/v3', foldersRouter);
 app.use('/v3', tagsRouter);
-app.use('/v3', usersRouter);
-app.use('/v3', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', {session: false, failWithError: true});
+app.get('/api/secret', jwtAuth, (req, res) => {
+  return res.json({data: 'super mario 64'});
+});
 
 // Catch-all 404
 app.use(function (req, res, next) {

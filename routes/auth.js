@@ -2,7 +2,7 @@
 
 const express = require('express');
 const passport = require('passport');
-const jsonwebtoken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const {JWT_SECRET, JWT_EXPIRY} = require('./../config')
