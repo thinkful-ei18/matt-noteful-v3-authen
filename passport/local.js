@@ -20,7 +20,6 @@ const localStrategy = new LocalStrategy((username, password, done) => {
           location: 'username'
         });
       }
-      console.log(password);
       
       const isValid = user.validatePassword(password);
       if (!isValid) {
