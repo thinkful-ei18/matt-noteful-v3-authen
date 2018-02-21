@@ -28,4 +28,13 @@ router.post('/login', localAuth, function (req, res) {
   res.json({ authToken });
 });
 
+const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: true });
+
+router.post('/refresh', jwtAuth, (req, res) => {
+  // console.log(req.user);
+  
+  const authToken = createAuthToken(req.user);
+  res.json({ authToken });
+});
+
 module.exports = router;
