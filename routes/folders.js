@@ -10,7 +10,7 @@ const Folder = require('../models/folder');
 const Note = require('../models/note');
 
 // protect /folders endpoint
-router.use('/folders', passport.authenticate('jwt', { session: false, failWithError: true }));
+// router.use('/folders', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/folders', (req, res, next) => {

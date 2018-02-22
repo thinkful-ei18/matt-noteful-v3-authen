@@ -16,7 +16,7 @@ router.get('/notes', (req, res, next) => {
   const { searchTerm, folderId, tagId } = req.query;
   const userId = req.user.id;
 
-  let filter = {};
+  let filter = { userId };
   /**
    * Use RegEx ($regex) Operator to find documents where title contain searchTerm
    *  title : {$regex: re}
@@ -104,6 +104,7 @@ router.get('/notes/:id', (req, res, next) => {
 router.post('/notes', (req, res, next) => {
   const { title, content, folderId, tags } = req.body;
   const userId = req.user.id;
+  console.log('CHECK IT', userId);
 
   /***** Never trust users - validate input *****/
   if (!title) {
@@ -113,7 +114,8 @@ router.post('/notes', (req, res, next) => {
   }
 
   const newItem = { title, content, folderId, tags, userId };
-
+  console.log('NEWITEM: ', newItem);
+  
   Note.create(newItem)
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
@@ -126,6 +128,8 @@ router.put('/notes/:id', (req, res, next) => {
   const { id } = req.params;
   const { title, content, folderId, tags } = req.body;
   const userId = req.user.id;
+  // console.log('CHECK IT', userId);
+  
 
   /***** Never trust users - validate input *****/
   if (!title) {

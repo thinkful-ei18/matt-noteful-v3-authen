@@ -10,7 +10,7 @@ const Tag = require('../models/tag');
 const Note = require('../models/note');
 
 // protect endpoints
-router.use('/tags', passport.authenticate('jwt', { session: false, failWithError: true }));
+// router.use('/tags', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/tags', (req, res, next) => {
